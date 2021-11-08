@@ -12,9 +12,12 @@ Analytics::~Analytics()
 }
 
 void Analytics::dispatch(const std::string &event, std::optional<void*> parameters){
-    for (auto listener{m_listeners[event].begin()}; listener != m_listeners[event].end(); ++listener){
+    for (auto listener = m_listeners[event].begin(); listener != m_listeners[event].end(); ++listener){
         if (listener->expired()){
             m_listeners[event].erase(listener);
+            if (!m_listeners[event].size()){
+                break;
+            }
             continue;
         }
         listener->lock()->update(parameters);
