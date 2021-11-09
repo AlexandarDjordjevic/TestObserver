@@ -9,5 +9,5 @@ public:
     Listener() = default;
     ~Listener() = default;
 
-    void update(std::optional<void*>) override;
+    void update(const std::string& event, std::optional<void*>) override;
 };

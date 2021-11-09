@@ -3,20 +3,25 @@
 #include <memory>
 #include <optional>
 
+using namespace std::string_literals;
+
 int main(){
     Analytics analytic;
     auto listener_1{std::make_shared<Listener>()};
-    analytic.subscribe("stop", listener_1);
+    analytic.subscribe(listener_1, {"stop"});
+    analytic.subscribe(listener_1, {"play"});
+    analytic.subscribe(listener_1, {"pause"});
     {
         auto listener_2{std::make_shared<Listener>()};
-        analytic.subscribe("stop", listener_2);
+        analytic.subscribe(listener_2, {"stop"});
 
-        auto parameters{"This is stop event message"};
+        auto parameters{"This is the event message"};
 
         analytic.dispatch("stop", reinterpret_cast<void*>(const_cast<char*>(parameters)));
-        analytic.subscribe("play", listener_2);
+        analytic.subscribe(listener_2, "play");
     }
     analytic.dispatch("play");
+    analytic.dispatch("pause");
 
     return 0;
 }

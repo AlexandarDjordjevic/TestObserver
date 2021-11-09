@@ -1,10 +1,12 @@
 #include <Listener.hpp>
+#include <iostream>
 #include <memory>
 #include <optional>
 
-void Listener::update(std::optional<void*> parameters) {
+void Listener::update(const std::string& event, std::optional<void*> parameters) {
+    std::cout << "Listener received: " << event << ".";
     if (parameters.has_value()){
-        std::cout << "Parameters: " << (char*)parameters.value() << std::endl;
+        std::cout << " Parameters: " << (char*)parameters.value();
     }
-    std::cout << "Listener received update!" << std::endl;
+    std::cout << std::endl;
 }

@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
-
+#include <list>
 #include <IListener.hpp>
 
 class Analytics
@@ -17,7 +17,7 @@ public:
 
     void dispatch(const std::string& event, std::optional<void*> parameters = std::nullopt);
 
-    void subscribe(const std::string& event, std::weak_ptr<IListener> listener);
+    void subscribe(std::weak_ptr<IListener> listener, const std::string& event);
 private:
     std::unordered_map<std::string, std::vector<std::weak_ptr<IListener>>> m_listeners;
 };

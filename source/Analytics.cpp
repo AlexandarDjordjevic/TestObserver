@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <list>
 
 Analytics::Analytics()
 {
@@ -11,21 +12,18 @@ Analytics::~Analytics()
 {
 }
 
-void Analytics::dispatch(const std::string &event, std::optional<void*> parameters){
-    for (auto listener = m_listeners[event].begin(); listener != m_listeners[event].end(); ++listener){
+void Analytics::dispatch(const std::string& event, std::optional<void*> parameters){
+    for (auto listener = m_listeners[event].begin(); listener != m_listeners[event].end();){
         if (listener->expired()){
             m_listeners[event].erase(listener);
-            if (!m_listeners[event].size()){
-                break;
-            }
             continue;
         }
-        listener->lock()->update(parameters);
+        listener->lock()->update(event, parameters);
+        listener++;
     }
-    std::cout << "Event " << event << " dispatched" << std::endl;
 }
 
-void Analytics::subscribe(const std::string &event, std::weak_ptr<IListener> listener){
+void Analytics::subscribe(std::weak_ptr<IListener> listener, const std::string &event){
     if (m_listeners[event].empty()) {
         m_listeners[event] = std::vector<std::weak_ptr<IListener>>();
     }

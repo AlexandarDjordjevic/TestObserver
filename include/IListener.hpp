@@ -4,5 +4,5 @@
 
 class IListener {
 public:
-    virtual void update(std::optional<void*>) = 0;
+    virtual void update(const std::string& event, std::optional<void*>) = 0;
 };
